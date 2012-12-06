@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Iceland2 - Time Tracking</title>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js "></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js"></script>
+    <script src="js/backbone.localStorage-min.js"></script>
+    <script src="js/main.js"></script>
+
+</head>
+<body>
+
+
+    <!-- Modal -->
+    <div id="checkin-modal" class="modal hide fade" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Check-in</h3>
+      </div>
+
+
+      <div class="modal-body">
+
+            <label>Projeto</label>
+            <input name="projeto" type="text" disabled>
+
+            <label>Tipo</label>
+            <select name="tipo" class="span4">
+                <option value="Desenvolvimento">Desenvolvimento</option>
+                <option value="Ajustes">Ajustes</option>
+            </select>
+
+            <label>Observação</label>
+            <textarea name="obs" class="span5" rows="5" placeholder="Isso aqui dificilmente vai ser usado, mas vai que né..."></textarea>
+
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+        <button class="btn btn-primary terminay" data-dismiss="modal" type="submit">Terminay</button>
+      </div>
+    </div>
+
+
+
+
+    <div class="container-narrow">
+
+      <div class="masthead hidden-phone">
+        <ul class="nav nav-pills pull-right">
+          <li class="active"><a href="#">Home</a></li>
+          <!-- <li><a href="#">About</a></li> -->
+          <!-- <li><a href="#">Contact</a></li> -->
+        </ul>
+        <h3 class="muted">Iceland 2nd Nation</h3>
+      </div>
+
+      <hr class="hidden-phone">
+
+      <div class="jumbotron">
+        <h1>Qual projeto tu ta trampando?</h1>
+        <p class="lead">Vamo lá mano. Eu sei que é chato mas a gente tem que fazer essa porra.</p>
+        <!-- <a class="btn btn-large btn-success" href="#">Check-in</a> -->
+        <!-- <a class="btn btn-large btn-danger" href="#">Check-out de Uva Verde</a> -->
+
+        <div id="pre-checkin">
+
+        </div>
+      </div>
+
+      <hr>
+
+      <script type="text/template" id="pre-checkin-template">
+          <button class="btn <% (!checkout && !checkin) ? print('btn-success') : print('btn-danger'); %>" id="check" <% (!projeto) ? print('disabled') : '' %>><% (projeto) ? (!checkout && !checkin) ? print('Check-in em') : print('Check-out em') : print('Seleciona um projeto aí do lado')%> <span name="projeto"><%=projeto%></span></button>
+          <% if(!checkout && !checkin){ %>
+          <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+          </button>
+          <% } %>
+          <ul class="dropdown-menu span4">
+            <li><a href="#">Uva Verde</a></li>
+            <li><a href="#">Bubbaloo Stickers</a></li>
+            <li><a href="#">Vanish Facebook</a></li>
+          </ul>
+
+      </script>
+
+
+      <script type="text/template" id="registros-item-template">
+              <td><i class="icon-calendar hidden-phone"></i> <%=dia%></td>
+              <td><span class="label label-success"><%=checkin%></span></td>
+              <td><span class="label label-important"><%=checkout%></span></td>
+              <td class="hidden-phone"><%=horas%></td>
+              <td><%=projeto%></td>
+              <td class="hidden-phone"><span class="label label-info"><%=tipo%></span></td>
+      </script>
+
+      <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Dia</th>
+              <th>Check-in</th>
+              <th>Check-out</th>
+              <th class="hidden-phone">Horas</th>
+              <th>Projeto</th>
+              <th class="hidden-phone">Tipo</th>
+            </tr>
+          </thead>
+          <tbody id="registros">
+
+
+          </tbody>
+        </table>
+
+
+      <hr>
+
+      <div class="footer">
+        <p>&copy; Copyright motherfucker direitos de Guilherme Medeiros.</p>
+      </div>
+
+    </div> <!-- /container -->
+
+
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-2247200-11']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+
+
+</body>
+</html>
