@@ -42,9 +42,7 @@ $(function(){
             checkin: false,
             checkout: false,
             horas: false,
-            projeto: '',
-            tipo: 'Desenvolvimento',
-            obs: ''
+            projeto: ''
         }
     })
 
@@ -54,7 +52,7 @@ $(function(){
      */
     var registros = new (Backbone.Collection.extend({
         model: registroModel,
-        localStorage: new Backbone.LocalStorage("registros"),
+        url: 'registros',
 
         /**
          * Comparador de ordenação dos itens da collection
@@ -153,7 +151,7 @@ $(function(){
                 var model = new registroModel();
 
                 if(registros.length){
-                    model.set({projeto: registros.first().get('projeto'), tipo: registros.first().get('tipo')});
+                    model.set({projeto: registros.first().get('projeto')});
                 }
 
                 registros.add(model);
@@ -174,63 +172,6 @@ $(function(){
                 checkinModel.save();
             });
 
-
-            /**
-             * View da modal de check-in. Essa modal vai cair fora, pois não vamos mais precisar de um tipo de checkin. Isso não importa
-             * @type {Backbone.View}
-             */
-            var checkinView = new (Backbone.View.extend({
-                events: {
-                    'click .terminay' : 'create'
-                },
-
-                input: {},
-
-                initialize: function(){
-                    checkinEmitter.on('save', this.render, this);
-                },
-
-                render: function(){
-                    this.input.projeto = this.input.projeto || this.$('input[name=projeto]');
-                    this.input.tipo = this.input.tipo || this.$('select[name=tipo]');
-                    this.input.obs = this.input.obs || this.$('textarea[name=obs]');
-
-                    _.each(this.input, function(el, name){
-                        el.val(checkinModel.get(name))
-                    })
-                },
-
-                changeVal: function(e){
-
-                    var field = $(e.target).data('bind'),
-                        val = $(e.target).val();
-
-                    checkinModel.set(field, val);
-
-                },
-
-                create: function(){
-                    var now = new Date();
-
-                    checkinModel.set({
-                        checkin: now,
-                        checkout: false,
-                        horas: false,
-                        dia: now.getDate() + '/' + now.getMonth(),
-                        projeto: this.input.projeto.val(),
-                        tipo: this.input.tipo.val(),
-                        obs: this.input.obs.val()
-                    })
-
-                    checkinEmitter.trigger('save');
-
-                    return false;
-                }
-            }))
-
-
-            checkinView.setElement('#checkin-modal');
-            checkinView.render();
 
 
 
@@ -254,15 +195,19 @@ $(function(){
 
                 changeProject: function(e){
                     e.preventDefault();
+
                     checkinModel.set('projeto', $(e.target).text())
                     checkinEmitter.trigger('save');
                 },
 
                 check: function(){
-                    if(checkinModel.get('checkin')){
 
-                        var now = new Date(),
-                            started = checkinModel.get('checkin')
+                    var now = new Date(),
+                        started;
+
+                    if(checkinModel.get('checkin')){//faz check-out
+
+                        started = checkinModel.get('checkin');
 
                         checkinModel.set({
                             checkout: now,
@@ -274,8 +219,19 @@ $(function(){
                         checkinEmitter.trigger('save');
 
 
-                    } else {
-                        $('#checkin-modal').modal();
+                    } else {//faz check-in
+
+                        checkinModel.set({
+                            checkin: now,
+                            checkout: false,
+                            horas: false,
+                            dia: now.getDate() + '/' + now.getMonth()
+                        })
+
+                        checkinEmitter.trigger('save');
+
+                        return false;
+
                     }
 
                     return false;
