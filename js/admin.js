@@ -4,8 +4,6 @@ Backbone.couch_connector.config.ddoc_name = "timetable";
 // Backbone.couch_connector.config.global_changes = true;
 
 
-
-
 $(function(){
 
     /**

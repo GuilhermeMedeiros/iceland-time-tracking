@@ -1,7 +1,7 @@
 var notification = webkitNotifications.createNotification(
   'icon.png',  // icon url - can be relative
-  'Ainda ta trampando nesse projeto?',  // notification title
-  'HEIN?!?!?!?!?!?!!?!?!?!??!!'  // notification body text
+  'Não esquece de fazer check-in!',  // notification title
+  'Se não o apoca te pega.'  // notification body text
 );
 
 notification.onclick = function(){
@@ -16,3 +16,32 @@ chrome.alarms.onAlarm.addListener(function() {
     notification.show();
 
 });
+
+
+
+
+var oauth = ChromeExOAuth.initBackgroundPage({
+  'request_url': 'https://www.google.com/accounts/OAuthGetRequestToken',
+  'authorize_url': 'https://www.google.com/accounts/OAuthAuthorizeToken',
+  'access_url': 'https://www.google.com/accounts/OAuthGetAccessToken',
+  'consumer_key': 'anonymous',
+  'consumer_secret': 'anonymous',
+  // 'scope': 'http://www.iceland2.com/',
+  'app_name': 'Iceland 2nd Nation - Time Tracking'
+});
+
+
+window.onload = function(){
+    console.log(oauth.hasToken())
+}
+
+function authorize(){
+
+    oauth.authorize(function() {
+        alert('authorized')
+    });
+
+}
+
+
+chrome.browserAction.onClicked.addListener(authorize);

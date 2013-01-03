@@ -24,16 +24,16 @@
 
 <!-- Templates -->
 <script type="text/template" id="pre-checkin-template">
-    <button class="btn <% (!checkout && !checkin) ? print('btn-success') : print('btn-danger'); %>" id="check" <% (!projeto) ? print('disabled') : '' %>><% (projeto) ? (!checkout && !checkin) ? print('Check-in em') : print('Check-out em') : print('Seleciona um projeto aí do lado')%> <span name="projeto"><%=projeto%></span></button>
-    <% if(!checkout && !checkin){ %>
+    <button class="btn <% (!checkin.checkout && !checkin.checkin) ? print('btn-success') : print('btn-danger'); %>" id="check" <% (!checkin.projeto) ? print('disabled') : '' %>><% (checkin.projeto) ? (!checkin.checkout && !checkin.checkin) ? print('Check-in em') : print('Check-out em') : print('Seleciona um projeto aí do lado')%> <span name="projeto"><%=checkin.projeto%></span></button>
+    <% if(!checkin.checkout && !checkin.checkin){ %>
     <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
     </button>
     <% } %>
     <ul class="dropdown-menu span4">
-        <li><a href="#">Uva Verde</a></li>
-        <li><a href="#">Bubbaloo Stickers</a></li>
-        <li><a href="#">Vanish Facebook</a></li>
+        <% _.each(projetos, function(projeto){ %>
+        <li><a href="#"><%=projeto.name%></a></li>
+        <% }) %>
     </ul>
 </script>
 
@@ -53,9 +53,8 @@
 
     <div class="masthead hidden-phone">
         <ul class="nav nav-pills pull-right">
-            <li class="active"><a href="#">Home</a></li>
-            <!-- <li><a href="#">About</a></li> -->
-            <!-- <li><a href="#">Contact</a></li> -->
+            <li><a href="admin.html">Admin</a></li>
+            <li class="active"><a href="index.html">Home</a></li>
         </ul>
 
         <h3 class="muted">Iceland 2nd Nation</h3>

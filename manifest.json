@@ -4,8 +4,11 @@
     "manifest_version": 2,
 
     "background": {
-        "scripts": ["js/background.js"],
-        "persistent": true
+        "scripts": [
+          "js/chrome_ex_oauthsimple.js",
+          "js/chrome_ex_oauth.js",
+          "js/background.js"
+        ]
     },
 
     "icons": {
@@ -16,7 +19,14 @@
         "chrome://favicon/",
         "http://localhost/",
         "notifications",
-        "alarms"
+        "alarms",
+        "background",
+
+            "tabs",
+            "https://www.google.com/accounts/OAuthGetRequestToken",
+            "https://www.google.com/accounts/OAuthAuthorizeToken",
+            "https://www.google.com/accounts/OAuthGetAccessToken",
+            "http://www.iceland2.com/*"
     ],
 
     "web_accessible_resources": [
@@ -24,9 +34,7 @@
     ],
 
     "browser_action": {
-        "default_icon": "icon.png",
-        "default_popup": "index.html"
-
+        "default_icon": "icon.png"
     },
 
     "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'"
