@@ -56,8 +56,13 @@ def checkin(request, projeto_id):
 								"erro": True,
 								"description": "User not logged in" 
 							}))
-
-	project = Project.objects.get(pk=projeto_id)
+	try:
+		project = Project.objects.get(pk=projeto_id)
+	except:
+		return HttpResponse(json.dumps({
+								"erro": True,
+								"description": "Project not found" 
+							}))
 
 	#verifica se existe projeto pendente de checkout
 	pending_checkout = ProjectTime.objects.filter(project=project, user=request.user, stop=None).count()
@@ -72,25 +77,37 @@ def checkin(request, projeto_id):
 	p.start = datetime.now()
 	p.save()
 
+	return HttpResponse(json.dumps({
+							"erro": False,
+							"data": None 
+						}))
+
 def checkout(request, projeto_id):
 	if not request.user.is_authenticated():
 		return HttpResponse(json.dumps({
 								"erro": True,
 								"description": "User not logged in" 
 							}))
-
-	project = Project.objects.get(pk=projeto_id)
-
-	#verifica se existe projeto pendente de checkout
-	pending_checkin = ProjectTime.objects.filter(project=project, user=request.user, start=None).count()
-
-	if pending_checkout:
+	try:
+		project = Project.objects.get(pk=projeto_id)
+	except:
 		return HttpResponse(json.dumps({
 								"erro": True,
-								"description": "Project with pending checkin" 
+								"description": "Project not found" 
 							}))
 
-	p = ProjectTime(project=project, user=request.user)
-	p.stop = datetime.now()
-	p.save()
+	try:
+		#verifica se existe projeto pendente de checkout
+		pending_checkout = ProjectTime.objects.get(project=project, user=request.user, stop=None)
+		pending_checkout.stop = datetime.now()
+		pending_checkout.save()
+		return HttpResponse(json.dumps({
+								"erro": False,
+								"data": None
+							}))
+	except:
+		return HttpResponse(json.dumps({
+								"erro": True,
+								"description": "Project doesn't have any checkin" 
+							}))
 
