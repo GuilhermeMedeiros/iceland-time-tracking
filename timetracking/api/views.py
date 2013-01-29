@@ -40,6 +40,13 @@ def do_login(request):
 				"description": "Username and password are not sent" 
 			}))
 
+def do_logout(request):
+	logout(request)
+	return HttpResponse(json.dumps({
+				"erro": False,
+				"data": "" 
+			}))
+
 def get_projetos(request):
 	if not request.user.is_authenticated():
 		return HttpResponse(json.dumps({
