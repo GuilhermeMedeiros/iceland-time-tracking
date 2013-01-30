@@ -1,11 +1,3 @@
-Backbone.couch_connector.config.base_url = "http://localhost:5984";
-Backbone.couch_connector.config.db_name = "timetracking";
-Backbone.couch_connector.config.ddoc_name = "timetable";
-// Backbone.couch_connector.config.global_changes = true;
-
-
-
-
 $(function(){
 
     /**
