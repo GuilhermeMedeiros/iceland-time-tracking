@@ -1,5 +1,11 @@
 $(function(){
 
+    // jQuery.cors = true;
+
+    var config = {
+        api_server: 'http://localhost:8000/api/'
+    }
+
     /**
      * Templates utilizados pra criar os itens e pra seção de pre-checkin (que é a área que envolve o botão de check-in/out e a listagem dos projetos)
      * @type {Function}
@@ -52,7 +58,7 @@ $(function(){
      */
     var registros = new (Backbone.Collection.extend({
         model: registroModel,
-        url: 'registros',
+        url: config.api_server + 'get_registros',
 
         /**
          * Comparador de ordenação dos itens da collection
@@ -149,9 +155,9 @@ $(function(){
      * Collection de projetos
      * @type {Backbone.Collection}
      */
-    var projetos = new (Backbone.Collection.extend({
+    var projetos = window.projetosCollection = new (Backbone.Collection.extend({
         model: projetoModel,
-        url: 'projetos'
+        url: config.api_server + 'get_projetos'
     }))()
 
 

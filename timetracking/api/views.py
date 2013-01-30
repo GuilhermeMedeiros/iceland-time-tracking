@@ -37,38 +37,49 @@ def do_login(request):
 	except (KeyError):
 		return HttpResponse(json.dumps({
 				"erro": True,
-				"description": "Username and password are not sent" 
+				"description": "Username and password are not sent"
 			}))
 
 def do_logout(request):
 	logout(request)
 	return HttpResponse(json.dumps({
 				"erro": False,
-				"data": "" 
+				"data": ""
 			}))
 
 def get_projetos(request):
 	if not request.user.is_authenticated():
 		return HttpResponse(json.dumps({
 								"erro": True,
-								"description": "User not logged in" 
+								"description": "User not logged in"
 							}))
 
 	projects = Project.objects.filter(users__username__contains=request.user.username)
 	return HttpResponse(json.dumps([p.to_json() for p in projects]))
 
+def get_registros(request):
+	if not request.user.is_authenticated():
+		return HttpResponse(json.dumps({
+								"erro": True,
+								"description": "User not logged in"
+							}))
+
+	registers = ProjectTime.objects.filter(user__username__contains=request.user.username)
+	return HttpResponse(json.dumps([p.to_json() for r in registers]))
+
+
 def checkin(request, projeto_id):
 	if not request.user.is_authenticated():
 		return HttpResponse(json.dumps({
 								"erro": True,
-								"description": "User not logged in" 
+								"description": "User not logged in"
 							}))
 	try:
 		project = Project.objects.get(pk=projeto_id)
 	except:
 		return HttpResponse(json.dumps({
 								"erro": True,
-								"description": "Project not found" 
+								"description": "Project not found"
 							}))
 
 	#verifica se existe projeto pendente de checkout
@@ -77,7 +88,7 @@ def checkin(request, projeto_id):
 	if pending_checkout:
 		return HttpResponse(json.dumps({
 								"erro": True,
-								"description": "Project with pending checkout" 
+								"description": "Project with pending checkout"
 							}))
 
 	p = ProjectTime(project=project, user=request.user)
@@ -86,21 +97,21 @@ def checkin(request, projeto_id):
 
 	return HttpResponse(json.dumps({
 							"erro": False,
-							"data": None 
+							"data": None
 						}))
 
 def checkout(request, projeto_id):
 	if not request.user.is_authenticated():
 		return HttpResponse(json.dumps({
 								"erro": True,
-								"description": "User not logged in" 
+								"description": "User not logged in"
 							}))
 	try:
 		project = Project.objects.get(pk=projeto_id)
 	except:
 		return HttpResponse(json.dumps({
 								"erro": True,
-								"description": "Project not found" 
+								"description": "Project not found"
 							}))
 
 	try:
@@ -115,6 +126,6 @@ def checkout(request, projeto_id):
 	except:
 		return HttpResponse(json.dumps({
 								"erro": True,
-								"description": "Project doesn't have any checkin" 
+								"description": "Project doesn't have any checkin"
 							}))
 
