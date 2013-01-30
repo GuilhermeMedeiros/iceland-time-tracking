@@ -47,7 +47,9 @@ def do_logout(request):
 				"data": ""
 			}))
 
+@csrf_exempt
 def get_projetos(request):
+	
 	if not request.user.is_authenticated():
 		return HttpResponse(json.dumps({
 								"erro": True,
@@ -65,7 +67,7 @@ def get_registros(request):
 							}))
 
 	registers = ProjectTime.objects.filter(user__username__contains=request.user.username)
-	return HttpResponse(json.dumps([p.to_json() for r in registers]))
+	return HttpResponse(json.dumps([r.to_json() for r in registers]))
 
 
 def checkin(request, projeto_id):
