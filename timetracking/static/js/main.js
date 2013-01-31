@@ -1,10 +1,5 @@
 $(function(){
 
-    if(chrome){
-         var bg_page = chrome.extension.getBackgroundPage();
-            bg_page.cu = 'buceta'
-
-    }
     /**
      * Templates utilizados pra criar os itens e pra seção de pre-checkin (que é a área que envolve o botão de check-in/out e a listagem dos projetos)
      * @type {Function}
