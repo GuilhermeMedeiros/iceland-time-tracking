@@ -1,5 +1,10 @@
 $(function(){
 
+    if(chrome){
+         var bg_page = chrome.extension.getBackgroundPage();
+            bg_page.cu = 'buceta'
+
+    }
     /**
      * Templates utilizados pra criar os itens e pra seção de pre-checkin (que é a área que envolve o botão de check-in/out e a listagem dos projetos)
      * @type {Function}
@@ -181,7 +186,7 @@ $(function(){
     /**
      * Faz um fetch dos registros, pegando o que tem no localstorage
      */
-    $.when(registros.fetch(/*{error: function(){window.location.href = './login.html'}}*/), projetos.fetch()).then(function(){
+    $.when(registros.fetch({error: function(){window.location.href = './login.html'}}), projetos.fetch()).then(function(){
 
         /**
          * Esse objeto trata os eventos dos novos check-ins, pra não ter que ficar re-declarando os eventos da model de check-in toda vez que ela é "clonada"
