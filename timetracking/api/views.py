@@ -62,16 +62,16 @@ def registros(request):
 	if not request.user.is_authenticated():
 		return HttpResponse(status=403)
 
-	if request.method == "POST":
-		return save_registro(request)
+	# if request.method == "POST":
+		# return save_registro(request)
 
 	registers = ProjectTime.objects.filter(user__username__contains=request.user.username)
 	return HttpResponse(json.dumps([r.to_json() for r in registers]))
 
 
-def save_registro(request):
-	print(json.loads(request.raw_post_data))
-	return HttpResponse(json.dumps(json.loads(request.raw_post_data)))
+# def save_registro(request):
+# 	print(json.loads(request.raw_post_data))
+# 	return HttpResponse(json.dumps(json.loads(request.raw_post_data)))
 
 
 def checkin(request, projeto_id):

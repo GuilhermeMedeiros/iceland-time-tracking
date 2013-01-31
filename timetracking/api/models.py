@@ -40,8 +40,9 @@ class ProjectTime(models.Model):
 		return {
 			"id": self.pk,
 			"project": self.project.name,
+			"project_id": self.project.id,
 			"user": self.user.username,
-			"start": str(self.start),
-			"stop": str(self.stop)
+			"start": str(self.start) if self.start else "",
+			"stop": str(self.stop) if self.stop else ""
 		}
 

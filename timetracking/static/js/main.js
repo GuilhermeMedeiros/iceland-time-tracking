@@ -41,6 +41,26 @@ $(function(){
             start: false,
             stop: false,
             project: ''
+        },
+
+        save: function(){
+            var method = false;
+
+            if(this.get('start') && !this.get('stop')){
+                method = 'checkin'
+            } else if (this.get('start') && this.get('stop')){
+                method = 'checkout'
+            }
+
+            if(method){
+                return $.getJSON(config.api_server + 'projeto/' + this.get('project_id') + '/' + method, function(){
+
+                })
+
+            } else {
+                return false;
+            }
+
         }
     })
 
@@ -79,7 +99,6 @@ $(function(){
         render: function(){
             var data = this.model.toJSON();
 
-            console.log(data)
             if(!data.start) return this; //Item novo
 
             var start_date = new Date(data.start),
@@ -177,8 +196,11 @@ $(function(){
         var newCheckinModel = function(){
             var model = new registroModel();
 
+
             if(registros.length){
-                model.set({projeto: registros.first().get('projeto')});
+                var lastproject = projetos.where({'name': registros.first().get('project')})[0];
+
+                model.set({project: lastproject.get('name'), project_id: lastproject.get('id')});
             }
 
             registros.add(model);
@@ -189,7 +211,7 @@ $(function(){
 
 
         //usa o ultimo registro caso ele exista
-        if(registros.length && !registros.first().get('checkout')){
+        if(registros.length && !registros.first().get('stop')){
             var checkinModel = registros.first()
         } else { //se não cria um novo
             var checkinModel = newCheckinModel();
@@ -222,7 +244,9 @@ $(function(){
             changeProject: function(e){
                 e.preventDefault();
 
-                checkinModel.set('projeto', $(e.target).text())
+                checkinModel.set('project', $(e.target).text())
+                checkinModel.set('project_id', $(e.target).data('projetoid'))
+
                 checkinEmitter.trigger('save');
             },
 
@@ -231,14 +255,14 @@ $(function(){
                 var now = new Date(),
                     started;
 
-                if(checkinModel.get('checkin')){//faz check-out
+                if(checkinModel.get('start')){//faz check-out
 
-                    started = checkinModel.get('checkin');
+                    started = checkinModel.get('start');
 
                     checkinModel.set({
-                        checkout: now,
-                        horas: passedHours(now, new Date(started))
+                        stop: now
                     })
+
                     checkinModel.save();
 
                     checkinModel = newCheckinModel();
@@ -248,10 +272,7 @@ $(function(){
                 } else {//faz check-in
 
                     checkinModel.set({
-                        checkin: now,
-                        checkout: false,
-                        horas: false,
-                        dia: now.getDate() + '/' + now.getMonth()
+                        start: now
                     })
 
                     checkinEmitter.trigger('save');
@@ -267,7 +288,7 @@ $(function(){
 
                 this.$el.html(this.template({projetos: projetos.toJSON(), checkin: checkinModel.toJSON()}))
 
-                if(checkinModel.get('checkin')){
+                if(checkinModel.get('start')){
                     this.$el.removeClass('btn-group');
                 } else {
                     this.$el.addClass('btn-group');

@@ -23,15 +23,15 @@
 
 <!-- Templates -->
 <script type="text/template" id="pre-checkin-template">
-    <button class="btn <% (!checkin.checkout && !checkin.checkin) ? print('btn-success') : print('btn-danger'); %>" id="check" <% (!checkin.projeto) ? print('disabled') : '' %>><% (checkin.projeto) ? (!checkin.checkout && !checkin.checkin) ? print('Check-in em') : print('Check-out em') : print('Seleciona um projeto aí do lado')%> <span name="projeto"><%=checkin.projeto%></span></button>
-    <% if(!checkin.checkout && !checkin.checkin){ %>
+    <button class="btn <% (!checkin.stop && !checkin.start) ? print('btn-success') : print('btn-danger'); %>" id="check" <% (!checkin.project) ? print('disabled') : '' %>><% (checkin.project) ? (!checkin.stop && !checkin.start) ? print('Check-in em') : print('Check-out em') : print('Seleciona um projeto aí do lado')%> <span name="projeto"><%=checkin.project%></span></button>
+    <% if(!checkin.stop && !checkin.start){ %>
     <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
     </button>
     <% } %>
     <ul class="dropdown-menu span4">
         <% _.each(projetos, function(projeto){ %>
-        <li><a href="#"><%=projeto.name%></a></li>
+        <li><a href="#" data-projetoid="<%=projeto.id%>"><%=projeto.name%></a></li>
         <% }) %>
     </ul>
 </script>
