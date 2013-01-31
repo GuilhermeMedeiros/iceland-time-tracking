@@ -1,11 +1,5 @@
 $(function(){
 
-    // jQuery.cors = true;
-
-    var config = {
-        api_server: 'http://localhost:8000/api/'
-    }
-
     /**
      * Templates utilizados pra criar os itens e pra seção de pre-checkin (que é a área que envolve o botão de check-in/out e a listagem dos projetos)
      * @type {Function}
@@ -44,11 +38,9 @@ $(function(){
      */
     var registroModel = Backbone.Model.extend({
         defaults: {
-            dia: false,
-            checkin: false,
-            checkout: false,
-            horas: false,
-            projeto: ''
+            start: false,
+            stop: false,
+            project: ''
         }
     })
 
@@ -58,7 +50,7 @@ $(function(){
      */
     var registros = new (Backbone.Collection.extend({
         model: registroModel,
-        url: config.api_server + 'get_registros',
+        url: config.api_server + 'registros',
 
         /**
          * Comparador de ordenação dos itens da collection
@@ -87,12 +79,16 @@ $(function(){
         render: function(){
             var data = this.model.toJSON();
 
-            if(!data.checkin) return this; //Item novo
+            console.log(data)
+            if(!data.start) return this; //Item novo
 
-            data.horas = (data.horas) ? data.horas : passedHours(new Date(), new Date(data.checkin));
-            data.checkin = formatTime(new Date(data.checkin).getHours()) + ':' + formatTime(new Date(data.checkin).getMinutes())
-            data.checkout = (data.checkout) ? formatTime(new Date(data.checkout).getHours()) + ':' + formatTime(new Date(data.checkout).getMinutes()) : '';
+            var start_date = new Date(data.start),
+                stop_date = new Date(data.stop);
 
+            data.dia =  start_date.getDate() + '/' + start_date.getMonth()+1
+            data.horas = (data.stop) ? passedHours(stop_date, start_date) : passedHours(new Date(), start_date);
+            data.start = formatTime(start_date.getHours()) + ':' + formatTime(start_date.getMinutes())
+            data.stop = (data.stop) ? formatTime(stop_date.getHours()) + ':' + formatTime(stop_date.getMinutes()) : '';
 
             this.$el.html(this.template(data));
             return this;
@@ -157,7 +153,7 @@ $(function(){
      */
     var projetos = window.projetosCollection = new (Backbone.Collection.extend({
         model: projetoModel,
-        url: config.api_server + 'get_projetos'
+        url: config.api_server + 'projetos'
     }))()
 
 
@@ -166,7 +162,7 @@ $(function(){
     /**
      * Faz um fetch dos registros, pegando o que tem no localstorage
      */
-    $.when(registros.fetch(), projetos.fetch()).then(function(){
+    $.when(registros.fetch(/*{error: function(){window.location.href = './login.html'}}*/), projetos.fetch()).then(function(){
 
         /**
          * Esse objeto trata os eventos dos novos check-ins, pra não ter que ficar re-declarando os eventos da model de check-in toda vez que ela é "clonada"

@@ -26,7 +26,5 @@ class MyUserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(CustomUser, MyUserAdmin)
-
-
-
 admin.site.register(Project)
+admin.site.register(ProjectTime)

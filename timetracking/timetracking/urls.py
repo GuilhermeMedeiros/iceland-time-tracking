@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -10,8 +11,11 @@ urlpatterns = patterns('',
     #API
     url(r'^api/login', 'api.views.do_login'),
     url(r'^api/logout', 'api.views.do_logout'),
-    url(r'^api/get_projetos', 'api.views.get_projetos'),
-    url(r'^api/get_registros', 'api.views.get_registros'),
-    url(r'^api/projeto/(?P<projeto_id>\d+)/checkin', 'api.views.checkin'),
-    url(r'^api/projeto/(?P<projeto_id>\d+)/checkout', 'api.views.checkout'),
+    url(r'^api/projetos', 'api.views.projetos'),
+    url(r'^api/registros', 'api.views.registros'),
+    # url(r'^api/projeto/(?P<projeto_id>\d+)/checkin', 'api.views.checkin'),
+    # url(r'^api/projeto/(?P<projeto_id>\d+)/checkout', 'api.views.checkout'),
+    url(r'^(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': settings.STATIC_DOC_ROOT, 'show_indexes': True}),
+
 )

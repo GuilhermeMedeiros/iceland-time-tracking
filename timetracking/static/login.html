@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Iceland2 - Time Tracking</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+
+    <style type="text/css">
+      /* Override some defaults */
+      html, body {
+        background-color: #eee;
+      }
+      body {
+        padding-top: 40px;
+      }
+      .container {
+        width: 300px;
+      }
+
+      /* The white background content wrapper */
+      .container > .content {
+        background-color: #fff;
+        padding: 20px;
+        margin: 0 -20px;
+        -webkit-border-radius: 10px 10px 10px 10px;
+           -moz-border-radius: 10px 10px 10px 10px;
+                border-radius: 10px 10px 10px 10px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+                box-shadow: 0 1px 2px rgba(0,0,0,.15);
+      }
+
+      .login-form {
+        margin-left: 65px;
+      }
+
+      .alert-error {
+        display: none;
+        width: 168px;
+        font-size: 11px;
+      }
+
+
+      legend {
+        margin-right: -50px;
+        font-weight: bold;
+        color: #404040;
+      }
+
+    </style>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <script src="js/config.js"></script>
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="content">
+        <div class="row">
+            <div class="login-form">
+                <h2>Login</h2>
+                <form action="" id="form-login">
+                    <fieldset>
+                        <div class="clearfix">
+                            <input type="text" placeholder="Username" id="input-username">
+                        </div>
+                        <div class="clearfix">
+                            <input type="password" placeholder="Password" id="input-password">
+                        </div>
+                        <div class="alert alert-error">eerrro</div>
+                        <button class="btn btn-primary" type="submit">Entrar com tudo</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> <!-- /container -->
+
+<script type="text/javascript">
+    $('#form-login').on('submit', function(e){
+        e.preventDefault();
+
+        var data = {
+            username: $('#input-username').val(),
+            password: $('#input-password').val()
+        }
+
+        $.post(config.api_server + 'login', data, function(response){
+            if(response.erro){
+                $('.alert-error').text(response.description).show();
+            } else {
+                $('.alert-error').hide();
+                window.location.href = './index.html'
+            }
+
+        }, 'json')
+    })
+
+</script>
+
+</body>
+</html>
