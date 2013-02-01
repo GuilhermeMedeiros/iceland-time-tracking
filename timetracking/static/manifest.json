@@ -16,6 +16,7 @@
     "permissions": [
         "chrome://favicon/",
         "http://localhost/",
+        "http://186.202.121.97:8000/",
         "notifications",
         "alarms",
         "background",
