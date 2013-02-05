@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     #API
+    url(r'^api/me', 'api.views.me'),
     url(r'^api/login', 'api.views.do_login'),
     url(r'^api/logout', 'api.views.do_logout'),
     url(r'^api/projetos', 'api.views.projetos'),

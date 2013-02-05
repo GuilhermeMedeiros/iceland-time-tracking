@@ -61,7 +61,7 @@ MEDIA_URL = ''
 # Example: "/home/media/media.lawrence.com/static/"
 STATIC_ROOT = ''
 
-STATIC_DOC_ROOT = '/Applications/MAMP/htdocs/time/timetracking/static'
+STATIC_DOC_ROOT = '/Applications/MAMP/htdocs/timetracking/timetracking/static'
 
 
 # URL prefix for static files.

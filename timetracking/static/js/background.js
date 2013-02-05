@@ -3,8 +3,8 @@ var notification = function(){
 
   var notification = webkitNotifications.createNotification(
     'icon.png',  // icon url - can be relative
-    'Não esquece de fazer check-in hein!',  // notification title
-    'É só clicar em um botãozinho. Não custa nada.'  // notification body text
+    'Não esqueça de fazer check-in.',  // notification title
+    'Clique aqui!'  // notification body text
   );
 
   notification.onclick = function(){
@@ -15,7 +15,7 @@ var notification = function(){
   notification.show();
 }
 
-chrome.alarms.create({periodInMinutes: 60})
+chrome.alarms.create({periodInMinutes: 30})
 
 chrome.alarms.onAlarm.addListener(function() {
   notification()

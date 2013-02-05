@@ -1,5 +1,7 @@
 $(function(){
 
+    "use strict";
+
     /**
      * Templates utilizados pra criar os itens e pra seção de pre-checkin (que é a área que envolve o botão de check-in/out e a listagem dos projetos)
      * @type {Function}
@@ -177,11 +179,25 @@ $(function(){
 
 
 
+    var requestLogin = function(){
+        return $.getJSON(config.api_server + 'me', function(user){
+            $('#user-name').text(user.name);
+            $('#logout').on('click', function(){
+                $.get(config.api_server + 'logout', function(){
+                    window.location.href = './login.html'
+                })
+            })
+        }).error(function(){
+            window.location.href = './login.html'
+        })
+
+    }
+
 
     /**
      * Faz um fetch dos registros, pegando o que tem no localstorage
      */
-    $.when(registros.fetch({error: function(){window.location.href = './login.html'}}), projetos.fetch()).then(function(){
+    $.when(requestLogin(), registros.fetch(), projetos.fetch()).then(function(){
 
         /**
          * Esse objeto trata os eventos dos novos check-ins, pra não ter que ficar re-declarando os eventos da model de check-in toda vez que ela é "clonada"
@@ -236,7 +252,6 @@ $(function(){
 
             initialize: function(){
                 this.template = preCheckinTemplate;
-
                 checkinEmitter.on('save', this.render, this);
 
             },
@@ -246,6 +261,7 @@ $(function(){
 
                 checkinModel.set('project', $(e.target).text())
                 checkinModel.set('project_id', $(e.target).data('projetoid'))
+                console.log($(e.target).text(), $(e.target).data('projetoid'))
 
                 checkinEmitter.trigger('save');
             },
@@ -289,9 +305,16 @@ $(function(){
                 this.$el.html(this.template({projetos: projetos.toJSON(), checkin: checkinModel.toJSON()}))
 
                 if(checkinModel.get('start')){
+                    $('#pre-checkin-label').text('Clique para fazer checkout.');
                     this.$el.removeClass('btn-group');
                 } else {
+                    $('#pre-checkin-label').text('Clique para fazer checkin. Ou mude o projeto clicando na seta.');
                     this.$el.addClass('btn-group');
+                }
+
+
+                if(!checkinModel.get('project').length){
+                    $('#pre-checkin-label').text('Selecione um projeto clicando na seta.');
                 }
             }
         }))

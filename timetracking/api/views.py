@@ -48,6 +48,18 @@ def do_logout(request):
 				"data": ""
 			}))
 
+def me(request):
+	if not request.user.is_authenticated():
+		return HttpResponse(status=403)
+
+	if(request.user.is_superuser):
+		return HttpResponse(status=403)
+
+	return HttpResponse(json.dumps({
+			"name": request.user.get_full_name(),
+			"email": request.user.email
+		}))
+
 @csrf_exempt
 def projetos(request):
 	if not request.user.is_authenticated():

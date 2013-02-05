@@ -15,17 +15,10 @@
 
     "permissions": [
         "chrome://favicon/",
-        "http://localhost/",
-        "http://186.202.121.97:8000/",
+        "http://localhost:8000/*",
         "notifications",
         "alarms",
-        "background",
-
-            "tabs",
-            "https://www.google.com/accounts/OAuthGetRequestToken",
-            "https://www.google.com/accounts/OAuthAuthorizeToken",
-            "https://www.google.com/accounts/OAuthGetAccessToken",
-            "http://www.iceland2.com/*"
+        "background"
     ],
 
     "web_accessible_resources": [
