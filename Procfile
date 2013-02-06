@@ -1,1 +1,1 @@
-web: timetracking/manage.py runserver
+web: python timetracking/manage.py runserver 0.0.0.0:$PORT --noreload
